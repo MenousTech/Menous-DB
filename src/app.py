@@ -1,6 +1,8 @@
 from api import *
 from auth import *
 from prettytable import *
+import sys
+
 # authenticate()
 
 def dbList():
@@ -97,30 +99,43 @@ def main():
                 bindings[i]()
 
 
-if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == "--cli":
-        main()
-    if len(sys.argv) > 1 and sys.argv[1] == '--newuser':
-        signup()
-    elif len(sys.argv) > 1 and sys.argv[1] == '--key':
-        getuserkey()
-    elif len(sys.argv) > 1 and (sys.argv[1] == '--help' or \
-                                sys.argv[1] == '-h') :
-        print("Welcome to Menous Db")
-        print("Menous db will run on port 5555")
-        print("To create a new user execute menousdb --newuser")
-        print("To get your API key execute menousdb --key")
-    elif "--port" in sys.argv:
-        index = sys.argv.index("--port")
-        app.run(port = sys.argv[index+1], host="0.0.0.0")
-    elif len(sys.argv) > 1 and (sys.argv[1] == "--start" or sys.argv[1] == "--run"):
-        app.run(port = 5555, host="0.0.0.0")
-    print("""
-███╗░░░███╗███████╗███╗░░██╗░█████╗░██╗░░░██╗░██████╗  ██████╗░██████╗░
-████╗░████║██╔════╝████╗░██║██╔══██╗██║░░░██║██╔════╝  ██╔══██╗██╔══██╗
-██╔████╔██║█████╗░░██╔██╗██║██║░░██║██║░░░██║╚█████╗░  ██║░░██║██████╦╝
-██║╚██╔╝██║██╔══╝░░██║╚████║██║░░██║██║░░░██║░╚═══██╗  ██║░░██║██╔══██╗
-██║░╚═╝░██║███████╗██║░╚███║╚█████╔╝╚██████╔╝██████╔╝  ██████╔╝██████╦╝
-╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚══╝░╚════╝░░╚═════╝░╚═════╝░  ╚═════╝░╚═════╝░                                                                                   
-    """)
-    app.run(port = port, host="0.0.0.0", debug=True)
+# if __name__ == '__main__':
+#     if len(sys.argv) > 1 and sys.argv[1] == "--cli":
+#         main()
+#     if len(sys.argv) > 1 and sys.argv[1] == '--newuser':
+#         signup()
+#     elif len(sys.argv) > 1 and sys.argv[1] == '--key':
+#         getuserkey()
+#     elif len(sys.argv) > 1 and (sys.argv[1] == '--help' or \
+#                                 sys.argv[1] == '-h') :
+#         print("Welcome to Menous Db")
+#         print("Menous db will run on port 5555")
+#         print("To create a new user execute menousdb --newuser")
+#         print("To get your API key execute menousdb --key")
+#     elif "--port" in sys.argv:
+#         index = sys.argv.index("--port")
+#         app.run(port = sys.argv[index+1], host="0.0.0.0")
+#     elif len(sys.argv) > 1 and (sys.argv[1] == "--start" or sys.argv[1] == "--run"):
+#         app.run(port = 5555, host="0.0.0.0")
+#     print("""
+# ███╗░░░███╗███████╗███╗░░██╗░█████╗░██╗░░░██╗░██████╗  ██████╗░██████╗░
+# ████╗░████║██╔════╝████╗░██║██╔══██╗██║░░░██║██╔════╝  ██╔══██╗██╔══██╗
+# ██╔████╔██║█████╗░░██╔██╗██║██║░░██║██║░░░██║╚█████╗░  ██║░░██║██████╦╝
+# ██║╚██╔╝██║██╔══╝░░██║╚████║██║░░██║██║░░░██║░╚═══██╗  ██║░░██║██╔══██╗
+# ██║░╚═╝░██║███████╗██║░╚███║╚█████╔╝╚██████╔╝██████╔╝  ██████╔╝██████╦╝
+# ╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚══╝░╚════╝░░╚═════╝░╚═════╝░  ╚═════╝░╚═════╝░                                                                                   
+#     """)
+#     app.run(port = port, host="0.0.0.0")
+        
+if len(sys.argv) > 1:
+    argument = sys.argv[1]
+    
+    if "help" in argument:
+            print("Commnds available:\n")
+            for i in bindings.keys():
+                print(i)
+    for i in bindings:
+        if i == argument:
+            bindings[i]()
+else:
+    main()
