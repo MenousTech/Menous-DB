@@ -1,345 +1,167 @@
-<h2>Table of Contents</h2>
+<p><img src="../assets/logo-full.png" alt=""></p>
+<h1 id="introduction">Introduction</h1>
+<p>Menous DB is a simple and elegant key value database. It uses a structured file system to store key values. The database is written in python and can be used directly in python using the menousdb pip package.</p>
+<h1 id="installation">Installation</h1>
+<p>You can install the menousdb module by using the pip package manager. You can install the package manager on all platforms by using the following commands:</p>
+<pre><code>For Linux use the following commands
 
-<ol>
-<li>Introduction</li>
-<li>System Requirements</li>
-<li>Installation</li>
-<li>Usage</li>
-<li>API Endpoints</li>
-<li>Examples</li>
-<li>License</li>
-<li>Author Information</li>
-</ol>
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt-get install python3-pip
+</code></pre>
+<pre><code>For Mac OS use homebrew to install pip
 
-<hr />
+$ brew install python3-pip
+</code></pre>
+<p>Next we will use the pip package manager to install the library. Make sure you have pip set up properly and you can access it through your terminal window.</p>
+<pre><code>(Windows)
 
-<h2>1. Introduction</h2>
+$ pip install menousdb 
 
-<p><strong>Menous DB</strong> is a lightweight, open-source database management system designed for simplicity and ease of use. It provides a RESTful API for managing databases and tables, making it suitable for a variety of applications. This documentation provides an overview of Menous DB, including system requirements, installation instructions, and usage guidelines.</p>
+(Mac OS and Linux)
 
-<h3>Features:</h3>
+$ pip3 install menousdb
+</code></pre>
+<h1 id="documentation">Documentation</h1>
+<h3 id="importing-the-module">Importing the module</h3>
+<p>To import the menousdb import simply use</p>
+<pre><code class="language-python">from menousdb import *
+</code></pre>
+<h3 id="initializing-the-database">Initializing the database</h3>
+<p>To create a database from scratch use:</p>
+<pre><code class="language-python"># Using the imported class from the import statement
 
-<ul>
-<li>Create, read, update, and delete databases and tables.</li>
-<li>Execute SQL-like queries using simple API endpoints.</li>
-<li>User authentication and authorization.</li>
-<li>JSON and SQL database modes.</li>
-<li>Cross-platform support (macOS, Windows, Linux).</li>
-</ul>
+db = MenousDB(
+    url=&quot;http://localhost:5555/&quot;,
+    key=&quot;YOUR API KEY&quot;,
+    database=&quot;DATABASE&quot;
+)
 
-<hr />
+# Checking if the database exists
+if not db.checkDbExists():
+    # If not create the database
+    db.createDb()
+</code></pre>
+<h3 id="checking-if-the-database-exists">Checking if the database exists</h3>
+<pre><code class="language-python"># isCreated is either True or False
+isCreated = db.checkDbExists()
+</code></pre>
+<h3 id="reading-the-entire-database">Reading the entire database</h3>
+<p>To read the entire database we will use the readDb method. The readDb method returns a dictionary that can be converted to a dataframe. </p>
+<pre><code class="language-python">data = db.readDb()
+</code></pre>
+<h3 id="deleting-the-entire-database">Deleting the entire database</h3>
+<p>To delete the entire database we will use the deleteDb method.</p>
+<pre><code class="language-python">if db.checkDbExists():
+    db.deleteDb()
+else:
+    print(&quot;Database not found&quot;)
+</code></pre>
+<h3 id="creating-a-new-table">Creating a new table</h3>
+<p>To create a new table, the parameters are the name of the table and the attributes of the new table. The attributes parameter must be a list of strings.</p>
+<pre><code class="language-python"># Defining the table name and attributes
+table_name = &quot;test&quot;
+attributes = [&quot;name&quot;, &quot;age&quot;, &quot;gender&quot;]
 
-<h2>2. System Requirements</h2>
-
-<p>To run Menous DB, you need the following software and dependencies installed on your system:</p>
-
-<ul>
-<li>Python 3.7+</li>
-<li>Flask (Python web framework)</li>
-<li><a href="#">auth</a> (Authentication module)</li>
-<li>Operating System: macOS, Windows, or Linux</li>
-</ul>
-
-<hr />
-
-<h2>3. Installation</h2>
-
-<p>Follow these steps to install and run Menous DB on your system:</p>
-
-<h3>From hombrew for mac</h3>
-
-<ol>
-<li>First tap from the repository of Menous Technologies
-<code>
-$ brew tap menoustech/tap
-</code></li>
-<li>Second update hombrew for changes
-<code>
-$ brew update
-</code></li>
-<li>Install menousdb using homebrew
-<code>
-$ brew install menousdb
-</code></li>
-</ol>
-
-<h3>Manual Build</h3>
-
-<ol>
-<li><p>Clone the Menous DB repository from GitHub:
-<code>
-git clone https://github.com/snehashish0902/Menous-Db.git
-cd Menous-Db
-</code></p></li>
-<li><p>Install the required Python packages using pip:
-<code>
-pip install Flask
-</code></p></li>
-<li><p>Create the configuration file based on your operating system:</p>
-
-<ul>
-<li>macOS: <code>/Library/Caches/.menousdb/config.json</code></li>
-<li>Windows: <code>%APPDATA%\MenoudDb\config.json</code></li>
-<li>Linux: <code>/usr/local/bin/menousdb/config.json</code></li>
-</ul>
-
-<p>Sample Configuration (config.json):
-<code>
-{
-    "mode": "json",
-    "port": 5555
+# Creating a new table using the defined variable
+db.createTable(table_name, attributes)
+</code></pre>
+<h3 id="checking-if-a-table-exists">Checking if a table exists</h3>
+<p>To check if a table exists you can use the following which will return  a boolean value of True or False.</p>
+<pre><code class="language-python"># Defining the table name
+table_name = &quot;test&quot;
+# Cheking the table exists
+isCreate = db.checkTableExists(table_name)
+</code></pre>
+<h3 id="inserting-values-into-the-database">Inserting values into the database</h3>
+<p>To insert new values into the table you can use the following code. The parameter values must be a dictionary whose order of keys must exactly match the order of the attributes passed in the creation of the table.</p>
+<pre><code class="language-python"># Defining table name and values
+table_name = test
+values = {
+    &quot;name&quot;:&quot;John Doe&quot;,
+    &quot;age&quot;:&quot;15&quot;,
+    &quot;gender&quot;:&quot;male&quot;
 }
-</code></p></li>
-<li><p>Start Menous DB:</p>
 
-<ul>
-<li>For the default port (5555), run <code>python menousdb.py --start</code>.</li>
-<li>To specify a custom port, run <code>python menousdb.py --port &lt;port_number&gt;</code>.</li>
-</ul></li>
-</ol>
+db.insertIntoTable(
+    table=table_name,
+    values=values
+)
+</code></pre>
+<h3 id="selecting-the-entire-table">Selecting the entire table</h3>
+<p>To get the complete data of a table use the following code:</p>
+<pre><code class="language-python">table_name = &quot;test&quot;
+# Getting all the data in the table
+data = db.getTable(table_name)
+</code></pre>
+<h3 id="selecting-values-with-conditions">Selecting Values with conditions</h3>
+<p>To search for values with conditions you can use the following code. The parameters required are the table name and the conditions which will be a dictionary.</p>
+<pre><code class="language-python">table_name = &quot;test&quot;
+conditions = {
+    &quot;name&quot;:&quot;John Doe&quot;
+}
 
-<hr />
+# Contains all the values where the name is John Doe
+data = db.selectWhere(
+    table= table_name,
+    conditions=conditions
+)
+</code></pre>
+<h3 id="selecting-columns">Selecting columns</h3>
+<p>To select only specefic columns from the table you can use the following code. The parameters include the table name and a list of names of columns you want to select. </p>
+<pre><code class="language-python">table_name = &quot;test&quot;
+columns=[&quot;name&quot;,&quot;age&quot;]
 
-<h2>4. Usage</h2>
+# contains all the column values
+selectedData = db.selectColumns(table_name, columns)
+</code></pre>
+<h3 id="selecting-columns-with-conditions">Selecting columns with conditions</h3>
+<p>To select columns with conditions you can use the following code. The parameters include the table name, the target columns and the conditions. conditions will be a dictionary and columns will be an array. </p>
+<pre><code class="language-python">table_name=&quot;test&quot;
+columns=[&quot;name&quot;,&quot;age&quot;]
+conditions={&quot;name&quot;:&quot;John Doe&quot;}
 
-<p>Once Menous DB is running, you can use its RESTful API to manage databases and tables. You can interact with the API using HTTP requests and the provided endpoints. Here are some common actions you can perform:</p>
+data = db.selectColumnsWhere(
+    table_name,
+    columns,
+    conditions
+)
+</code></pre>
+<h3 id="updating-values">Updating values</h3>
+<p>To update the values in the table we need the conditions and the replacement values. The parameters are the table name, the conditions and the replacement values.</p>
+<pre><code class="language-python">table_name = &quot;test&quot;
+conditions = {
+    &quot;name&quot;:&quot;John Doe&quot;
+}
+values = {
+    &quot;name&quot;:&quot;William Smith&quot;
+}
 
-<ul>
-<li>Create a new database.</li>
-<li>Check if a database exists.</li>
-<li>Create tables within a database.</li>
-<li>Insert data into tables.</li>
-<li>Query tables with various conditions.</li>
-<li>Update table records.</li>
-<li>Delete tables and databases.</li>
-<li>Authenticate users for secure access.</li>
-</ul>
-
-<hr />
-
-<h2>5. API Endpoints</h2>
-
-<h3>Database Management:</h3>
-
-<ul>
-<li><p><strong>Create a Database:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/create-db</code></li>
-<li>Method: POST</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name)</li>
-<li>Description: Creates a new database.</li>
-</ul></li>
-<li><p><strong>Check if a Database Exists:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/check-db-exists</code></li>
-<li>Method: GET</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name)</li>
-<li>Description: Checks if a database exists.</li>
-</ul></li>
-<li><p><strong>Delete a Database:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/del-database</code></li>
-<li>Method: DELETE</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name)</li>
-<li>Description: Deletes a database.</li>
-</ul></li>
-</ul>
-
-<h3>Table Management:</h3>
-
-<ul>
-<li><p><strong>Create a Table:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/create-table</code></li>
-<li>Method: POST</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name), <code>attributes</code> (table attributes)</li>
-<li>Description: Creates a new table within a database.</li>
-</ul></li>
-<li><p><strong>Check if a Table Exists:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/check-table-exists</code></li>
-<li>Method: GET</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name)</li>
-<li>Description: Checks if a table exists within a database.</li>
-</ul></li>
-<li><p><strong>Insert Data into a Table:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/insert-into-table</code></li>
-<li>Method: POST</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name), <code>values</code> (data to insert)</li>
-<li>Description: Inserts data into a table.</li>
-</ul></li>
-<li><p><strong>Get Data from a Table:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/get-table</code></li>
-<li>Method: GET</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name)</li>
-<li>Description: Retrieves data from a table.</li>
-</ul></li>
-<li><p><strong>Query a Table with Conditions:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/select-where</code></li>
-<li>Method: GET</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name), <code>conditions</code> (query conditions)</li>
-<li>Description: Queries a table with specified conditions.</li>
-</ul></li>
-<li><p><strong>Select Specific Columns from a Table:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/select-columns</code></li>
-<li>Method: GET</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name), <code>columns</code> (columns to select)</li>
-<li>Description: Retrieves specific columns from a table.</li>
-</ul></li>
-<li><p><strong>Select Specific Columns with Conditions:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/select-columns-where</code></li>
-<li>Method: GET</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name), <code>columns</code> (columns to select), <code>conditions</code> (query conditions)</li>
-<li>Description: Retrieves specific columns with specified conditions.</li>
-</ul></li>
-<li><p><strong>Update Records in a Table:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/update-table</code></li>
-<li>Method: POST</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name), <code>conditions</code> (query conditions), <code>values</code> (new values)</li>
-<li>Description: Updates records in a table based on specified conditions.</li>
-</ul></li>
-<li><p><strong>Delete Records from a Table:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/delete-where</code></li>
-<li>Method: DELETE</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name), <code>conditions</code> (query conditions)</li>
-<li>Description: Deletes records from a table based on specified conditions.</li>
-</ul></li>
-<li><p><strong>Delete a Table:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/delete-table</code></li>
-<li>Method: DELETE</li>
-<li>Parameters: <code>key</code> (API key), <code>database</code> (database name), <code>table</code> (table name)</li>
-<li>Description: Deletes a table from a database.</li>
-</ul></li>
-</ul>
-
-<h3>Authentication:</h3>
-
-<ul>
-<li><p><strong>Check User Authentication:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/check-login</code></li>
-<li>Method: GET</li>
-<li>Parameters: <code>username</code> (username), <code>password</code> (password)</li>
-<li>Description: Validates user credentials.</li>
-</ul></li>
-<li><p><strong>Verify User Credentials:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/verify/&lt;username&gt;/&lt;password&gt;</code></li>
-<li>Method: GET</li>
-<li>Parameters: <code>username</code> (username), <code>password</code> (password)</li>
-<li>Description: Verifies user credentials and returns 'True' if valid.</li>
-</ul></li>
-<li><p><strong>Get User API Key:</strong></p>
-
-<ul>
-<li>Endpoint: <code>/getuserkey</code></li>
-<li>Method: GET</li>
-<li>Description: Retrieves the API key for the current user.</li>
-</ul></li>
-</ul>
-
-<hr />
-
-<h2>6. Examples</h2>
-
-<p>Here are some</p>
-
-<p>example use cases of Menous DB API:</p>
-
-<p><strong>Create a Database:</strong>
-<code>
-POST /create-db
-Parameters: key=&lt;API_KEY&gt;, database=&lt;DATABASE_NAME&gt;
-</code></p>
-
-<p><strong>Create a Table:</strong>
-<code>
-POST /create-table
-Parameters: key=&lt;API_KEY&gt;, database=&lt;DATABASE_NAME&gt;, table=&lt;TABLE_NAME&gt;, attributes=&lt;TABLE_ATTRIBUTES&gt;
-</code></p>
-
-<p><strong>Insert Data into a Table:</strong>
-<code>
-POST /insert-into-table
-Parameters: key=&lt;API_KEY&gt;, database=&lt;DATABASE_NAME&gt;, table=&lt;TABLE_NAME&gt;, values=&lt;DATA_TO_INSERT&gt;
-</code></p>
-
-<p><strong>Query Data from a Table:</strong>
-<code>
-GET /select-where
-Parameters: key=&lt;API_KEY&gt;, database=&lt;DATABASE_NAME&gt;, table=&lt;TABLE_NAME&gt;, conditions=&lt;QUERY_CONDITIONS&gt;
-</code></p>
-
-<p><strong>Update Records in a Table:</strong>
-<code>
-POST /update-table
-Parameters: key=&lt;API_KEY&gt;, database=&lt;DATABASE_NAME&gt;, table=&lt;TABLE_NAME&gt;, conditions=&lt;QUERY_CONDITIONS&gt;, values=&lt;NEW_VALUES&gt;
-</code></p>
-
-<p><strong>Delete Records from a Table:</strong>
-<code>
-DELETE /delete-where
-Parameters: key=&lt;API_KEY&gt;, database=&lt;DATABASE_NAME&gt;, table=&lt;TABLE_NAME&gt;, conditions=&lt;QUERY_CONDITIONS&gt;
-</code></p>
-
-<p><strong>Check User Authentication:</strong>
-<code>
-GET /check-login
-Parameters: username=&lt;USERNAME&gt;, password=&lt;PASSWORD&gt;
-</code></p>
-
-<p><strong>Verify User Credentials:</strong>
-<code>
-GET /verify/&lt;username&gt;/&lt;password&gt;
-</code></p>
-
-<p><strong>Get User API Key:</strong>
-<code>
-GET /getuserkey
-</code></p>
-
-<p>For more examples and detailed API usage, refer to the Menous DB documentation.</p>
-
-<hr />
-
-<h2>7. License</h2>
-
-<p>Menous DB is released under the MIT Open Source Software License. You can find the full license details in the LICENSE file included with the source code.</p>
-
-<hr />
-
-<h2>8. Author Information</h2>
-
-<ul>
-<li>Author: Snehashish Laskar</li>
-<li>Start Date: 1st November 2022</li>
-<li>Current Version: 0.2.1</li>
-<li>Contact: snehashish@example.com</li>
-</ul>
-
-<p>For any questions, feedback, or issues, please contact the author at the provided email address.</p>
-
-<hr />
+# This will replace the value of every row where the 
+# name is John Doe to William Smith
+db.updateWhere(
+    table=table_name,
+    conditions=conditions,
+    values=values
+)
+</code></pre>
+<h3 id="deleting-values">Deleting values</h3>
+<p>To delete values from a table with conditions use the following code. The parameters are the table name and the conditions.</p>
+<pre><code class="language-python">table_name = &quot;test&quot;
+conditions = {
+    &quot;name&quot;:&quot;John Doe&quot;,
+}
+db.deleteWhere(
+    table=table_name,
+    conditions=conditions
+)
+</code></pre>
+<h3 id="deleting-the-entire-table">Deleting the entire table</h3>
+<p>To delete the entire table just use the deleteTable functions. Its only parameter is the table name.</p>
+<pre><code class="language-python">table_name=&quot;test&quot;
+db.deleteTable(table_name)
+</code></pre>
+<h3 id="getting-all-the-databases">Getting all the databases</h3>
+<p>To get a list of all the databases use the following code.</p>
+<pre><code class="language-python">databases = db.getDatabases()
+</code></pre>

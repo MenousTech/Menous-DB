@@ -14,4 +14,4 @@ def convert_md_to_html(md_file_path, output_file_path):
 
 # Example usage:
 # Replace 'input.md' and 'output.html' with your input Markdown file and desired output HTML file paths
-convert_md_to_html('README.md', 'output.html')
+convert_md_to_html('pypi/README.md', 'output.html')
